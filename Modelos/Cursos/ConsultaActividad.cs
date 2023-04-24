@@ -1,7 +1,8 @@
-﻿using MySql.Data.MySqlClient;
+﻿//using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,15 +22,15 @@ namespace ModeloDual_NET_Framework.Modelos.Cursos
         {
             Boolean seHizo = true;
 
-            string sql = " SELECT idTema, nombreTema from tema;";
+            string sql = " SELECT idTema, nombreTema from Temas;";
 
-            MySqlConnection con = Conexion.conectar();
+            SqlConnection con = Conexion.conectar();
 
             try
             {
                 con.Open();
-                MySqlCommand cmd = new MySqlCommand(sql,con); 
-                MySqlDataAdapter data = new MySqlDataAdapter(cmd);
+                SqlCommand cmd = new SqlCommand(sql, con);
+                SqlDataAdapter data = new SqlDataAdapter(cmd);
                 data.Fill(dt);
 
             }catch(Exception ex)
@@ -49,16 +50,18 @@ namespace ModeloDual_NET_Framework.Modelos.Cursos
         {
             Boolean existe = false;
             Boolean seHizo = false;
-            string sql = "Select * FROM actividad, tema WHERE actividad.idActividad = " + act.Id + " and actividad.idTema = " + tema.Id + " and actividad.idTema = tema.idTema";
-            MySqlDataReader reader = null;
-            MySqlConnection conn = Conexion.conectar();
+            string sql = "SELECT * FROM Actividad , Temas WHERE Actividad.idActividad = @idActividad AND Actividad.idTema = @idTema AND Actividad.idTema = Temas.idTema";
+            SqlDataReader reader = null;
+            SqlConnection conn = Conexion.conectar();
 
             try
             {
+              
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@idActividad", act.Id);
+                cmd.Parameters.AddWithValue("@idTema", tema.Id);
                 reader = cmd.ExecuteReader();
-                //actividad.limpiarActividades();
                 existe = reader.HasRows;
 
             }
@@ -85,33 +88,33 @@ namespace ModeloDual_NET_Framework.Modelos.Cursos
         public Boolean buscarActividad(Actividad actividad, Tema tema)
         {
             Boolean seHizo =  false;
-            string sql = "Select * FROM actividad, tema WHERE actividad.idActividad = " + actividad.Id + " and actividad.idTema = " + tema.Id + " and actividad.idTema = tema.idTema";
-            MySqlDataReader reader = null;
-            MySqlConnection conn = Conexion.conectar();
-            
+            string sql = "SELECT * FROM Actividad, tema WHERE Actividad.idActividad = @idActividad AND Actividad.idTema = @idTema AND Actividad.idTema = Temas.idTema";
+            SqlDataReader reader = null;
+            SqlConnection conn = Conexion.conectar();
+
 
             try
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@idActividad", actividad.Id);
+                cmd.Parameters.AddWithValue("@idTema", tema.Id);
                 reader = cmd.ExecuteReader();
-                //actividad.limpiarActividades();
                 if (reader.HasRows)
                 {
                     seHizo = true;
                     while (reader.Read())
                     {
-                        
-                        actividad.Id = int.Parse(reader.GetString(0));
+                        actividad.Id = reader.GetInt32(0);
                         actividad.Nombre = reader.GetString(1);
-                        actividad.Horas = double.Parse(reader.GetString(2));
+                        actividad.Horas = reader.GetDouble(2);
                         actividad.Descripcion = reader.GetString(3);
-                        tema.Id = int.Parse(reader.GetString(4));
-                        
+                        tema.Id = reader.GetInt32(4);
                     }
                 }
 
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
@@ -134,20 +137,24 @@ namespace ModeloDual_NET_Framework.Modelos.Cursos
         {
             Boolean respuesta = false;
 
-            String sql = "INSERT INTO modelodual_db.actividad (idActividad,nombreAct, Horas, descripcion, idTema) VALUES " +
-                "('"+ actividad.Id+ "','"+ actividad.Nombre+"', '"+actividad.Horas+"', '"+actividad.Descripcion+"', '"+tema.Id+"')";
+            String sql = "INSERT INTO Actividad (idActividad, nombreAct, horas, descripcion, idTema) VALUES (@idActividad, @nombreAct, @horas, @descripcion, @idTema)";
 
-            MySqlConnection conexionBD = Conexion.conectar();
+            SqlConnection conexionBD = Conexion.conectar();
             conexionBD.Open();
 
             try
             {
-                MySqlCommand cmd = new MySqlCommand(sql, conexionBD);
+                SqlCommand cmd = new SqlCommand(sql, conexionBD);
+                cmd.Parameters.AddWithValue("@idActividad", actividad.Id);
+                cmd.Parameters.AddWithValue("@nombreAct", actividad.Nombre);
+                cmd.Parameters.AddWithValue("@horas", actividad.Horas);
+                cmd.Parameters.AddWithValue("@descripcion", actividad.Descripcion);
+                cmd.Parameters.AddWithValue("@idTema", tema.Id);
                 cmd.ExecuteNonQuery();
-                //MessageBox.Show("Se ha guardado el registro.");
                 respuesta = true;
-                
-            }catch (Exception ex)
+
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show("Error al guardar: " + ex.Message);
             }
@@ -165,16 +172,20 @@ namespace ModeloDual_NET_Framework.Modelos.Cursos
         {
             Boolean respuesta = false;
 
-            String sql = "UPDATE actividad SET nombreAct = '"+actividad.Nombre+"', Horas = '"+actividad.Horas+"', descripcion = '"+actividad.Descripcion+"', idTema = '"+tema.Id+"' WHERE idActividad = '"+actividad.Id+"' and idTema = '"+tema.Id+"'";
+            String sql = "UPDATE Actividad SET nombreAct = @nombreAct, Horas = @Horas, descripcion = @descripcion, idTema = @idTema WHERE idActividad = @idActividad AND idTema = @idTema";
 
-            MySqlConnection conexionBD = Conexion.conectar();
+            SqlConnection conexionBD = Conexion.conectar();
             conexionBD.Open();
 
             try
             {
-                MySqlCommand cmd = new MySqlCommand(sql, conexionBD);
+                SqlCommand cmd = new SqlCommand(sql, conexionBD);
+                cmd.Parameters.AddWithValue("@nombreAct", actividad.Nombre);
+                cmd.Parameters.AddWithValue("@Horas", actividad.Horas);
+                cmd.Parameters.AddWithValue("@descripcion", actividad.Descripcion);
+                cmd.Parameters.AddWithValue("@idTema", tema.Id);
+                cmd.Parameters.AddWithValue("@idActividad", actividad.Id);
                 cmd.ExecuteNonQuery();
-                //MessageBox.Show("Se ha guardado el registro.");
                 respuesta = true;
 
             }
@@ -195,16 +206,17 @@ namespace ModeloDual_NET_Framework.Modelos.Cursos
         {
             Boolean respuesta = false;
 
-            String sql = "DELETE FROM actividad  WHERE actividad.idActividad = " + actividad.Id + " and actividad.idTema = " + tema.Id + "";
+            String sql = "DELETE FROM Actividad WHERE Actividad.idActividad = @idActividad AND Actividad.idTema = @idTema";
 
-            MySqlConnection conexionBD = Conexion.conectar();
+            SqlConnection conexionBD = Conexion.conectar();
             conexionBD.Open();
 
             try
             {
-                MySqlCommand cmd = new MySqlCommand(sql, conexionBD);
+                SqlCommand cmd = new SqlCommand(sql, conexionBD);
+                cmd.Parameters.AddWithValue("@idActividad", actividad.Id);
+                cmd.Parameters.AddWithValue("@idTema", tema.Id);
                 cmd.ExecuteNonQuery();
-                //MessageBox.Show("Se ha guardado el registro.");
                 respuesta = true;
 
             }
