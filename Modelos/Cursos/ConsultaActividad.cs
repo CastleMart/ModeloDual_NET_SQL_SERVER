@@ -46,6 +46,12 @@ namespace ModeloDual_NET_Framework.Modelos.Cursos
             return seHizo;
         }
 
+        /// <summary>
+        /// Método que verifica si existe la actividad solicitada.
+        /// </summary>
+        /// <param name="act"></param>
+        /// <param name="tema"></param>
+        /// <returns></returns>
         public Boolean existeActividad(Actividad act, Tema tema)
         {
             Boolean existe = false;
@@ -168,6 +174,12 @@ namespace ModeloDual_NET_Framework.Modelos.Cursos
 
         }
 
+        /// <summary>
+        /// Método que realiza la actualización de un registro de la tabla actividad.
+        /// </summary>
+        /// <param name="actividad"></param>
+        /// <param name="tema"></param>
+        /// <returns></returns>
         public Boolean actualizarActividad(Actividad actividad, Tema tema)
         {
             Boolean respuesta = false;
@@ -202,6 +214,13 @@ namespace ModeloDual_NET_Framework.Modelos.Cursos
             return respuesta;
 
         }
+
+        /// <summary>
+        /// Método que elimina un registro de la tabla actividad.
+        /// </summary>
+        /// <param name="actividad"></param>
+        /// <param name="tema"></param>
+        /// <returns></returns>
         public Boolean eliminarActividad(Actividad actividad, Tema tema)
         {
             Boolean respuesta = false;

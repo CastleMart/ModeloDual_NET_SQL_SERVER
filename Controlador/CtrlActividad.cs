@@ -11,13 +11,22 @@ using System.Windows.Forms;
 namespace ModeloDual_NET_Framework.Controlador
 {
     internal class CtrlActividad
+
     {
+        //Atributos de la clase controlador de la actividad.
         private Actividad act = new Actividad();
         private Tema tema = new Tema();
         private ConsultaActividad consulta;
         private Form1 formAct;
         private DataTable dt = new DataTable();
 
+        /// <summary>
+        /// Constructor de la clase Controlador de la actividades.
+        /// </summary>
+        /// <param name="act"></param>
+        /// <param name="tema"></param>
+        /// <param name="consulta"></param>
+        /// <param name="formAct"></param>
         public CtrlActividad(Actividad act, Tema tema, ConsultaActividad consulta, Form1 formAct)
         {
             this.act = act;

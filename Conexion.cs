@@ -20,19 +20,10 @@ namespace ModeloDual_NET_Framework
 
             try
             {
-                //var cadenaConexion = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
-                //MySqlConnection conexion = new MySqlConnection(cadenaConexion);
-
-                var builder = new SqlConnectionStringBuilder();
-                builder.DataSource = @"DESKTOP-M164FR2\SQLEXPRESS";
-                builder.InitialCatalog = "ModeloDual";
-                builder.IntegratedSecurity = true;
-
-                String miau = builder.ToString();
-
-                //var conexion = builder.ToString();
+                //Leer la información para la conexión de la base de datos desde el archivo de configuración.
                 String cadenaConexion = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
                 
+                //Crear la conexión mandarla para su uso.
                 SqlConnection conexion = new SqlConnection(cadenaConexion);
 
                 return conexion;
