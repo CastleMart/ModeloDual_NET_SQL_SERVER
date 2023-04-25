@@ -88,7 +88,7 @@ namespace ModeloDual_NET_Framework.Modelos.Cursos
         public Boolean buscarActividad(Actividad actividad, Tema tema)
         {
             Boolean seHizo =  false;
-            string sql = "SELECT * FROM Actividad, tema WHERE Actividad.idActividad = @idActividad AND Actividad.idTema = @idTema AND Actividad.idTema = Temas.idTema";
+            string sql = "SELECT * FROM Actividad, Temas WHERE Actividad.idActividad = @idActividad AND Actividad.idTema = @idTema AND Actividad.idTema = Temas.idTema";
             SqlDataReader reader = null;
             SqlConnection conn = Conexion.conectar();
 

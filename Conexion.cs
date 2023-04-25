@@ -23,14 +23,14 @@ namespace ModeloDual_NET_Framework
                 //var cadenaConexion = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
                 //MySqlConnection conexion = new MySqlConnection(cadenaConexion);
 
-                /*var builder = new SqlConnectionStringBuilder();
+                var builder = new SqlConnectionStringBuilder();
                 builder.DataSource = @"DESKTOP-M164FR2\SQLEXPRESS";
                 builder.InitialCatalog = "ModeloDual";
-                builder.IntegratedSecurity = true;*/
+                builder.IntegratedSecurity = true;
 
                 //var conexion = builder.ToString();
                 var cadenaConexion = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
-                SqlConnection conexion = new SqlConnection(cadenaConexion);
+                SqlConnection conexion = new SqlConnection(builder.ToString());
                 
 
                 return conexion;

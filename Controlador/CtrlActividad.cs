@@ -39,7 +39,7 @@ namespace ModeloDual_NET_Framework.Controlador
         /// </summary>
         public void iniciar()
         {
-            this.formAct.Text = " Modelo Dual CTRL";
+            this.formAct.Text = " Modelo Dual Actividades";
             this.formAct.Location = new Point(0,0);
 
         }
