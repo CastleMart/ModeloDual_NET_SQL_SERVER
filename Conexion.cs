@@ -28,10 +28,12 @@ namespace ModeloDual_NET_Framework
                 builder.InitialCatalog = "ModeloDual";
                 builder.IntegratedSecurity = true;
 
+                String miau = builder.ToString();
+
                 //var conexion = builder.ToString();
-                var cadenaConexion = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
-                SqlConnection conexion = new SqlConnection(builder.ToString());
+                String cadenaConexion = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
                 
+                SqlConnection conexion = new SqlConnection(cadenaConexion);
 
                 return conexion;
             }
